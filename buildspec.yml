@@ -12,6 +12,7 @@ phases:
   build:
     commands:
       - cdk synth
+      - cdk synth CdkPipelineLabStack
 
 artifacts:
   base-directory: cdk.out
