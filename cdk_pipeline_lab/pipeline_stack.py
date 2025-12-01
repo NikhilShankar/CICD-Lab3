@@ -3,6 +3,7 @@ from aws_cdk import (
     aws_codepipeline as codepipeline,
     aws_codepipeline_actions as codepipeline_actions,
     aws_codebuild as codebuild,
+    aws_iam as iam,
 )
 from constructs import Construct
 
@@ -45,9 +46,27 @@ class PipelineStack(Stack):
             self, f"{student_id}-CdkBuild",
             project_name=f"{student_id}-CdkBuild",
             environment=codebuild.BuildEnvironment(
-                build_image=codebuild.LinuxBuildImage.STANDARD_7_0
+                build_image=codebuild.LinuxBuildImage.STANDARD_7_0,
+                privileged=True
             ),
             build_spec=codebuild.BuildSpec.from_source_filename("buildspec.yml")
+        )
+
+        # Grant CodeBuild permissions to deploy CDK stacks
+        build_project.add_to_role_policy(
+            iam.PolicyStatement(
+                actions=[
+                    "sts:AssumeRole",
+                    "cloudformation:*",
+                    "s3:*",
+                    "iam:*",
+                    "lambda:*",
+                    "dynamodb:*",
+                    "apigateway:*",
+                    "ssm:GetParameter"
+                ],
+                resources=["*"]
+            )
         )
 
         build_action = codepipeline_actions.CodeBuildAction(
