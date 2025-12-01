@@ -11,11 +11,17 @@ class PipelineStack(Stack):
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
+        # Student ID prefix
+        student_id = "9026254"
+
         # Connection ARN
         connection_arn = "arn:aws:codeconnections:us-east-1:867344462708:connection/9462f619-d105-410c-b8fb-feb930ccbac5"
 
         # Create the pipeline
-        pipeline = codepipeline.Pipeline(self, "CdkPipeline")
+        pipeline = codepipeline.Pipeline(
+            self, f"{student_id}-CdkPipeline",
+            pipeline_name=f"{student_id}-CdkPipeline"
+        )
 
         # Source stage
         source_output = codepipeline.Artifact()
@@ -36,7 +42,8 @@ class PipelineStack(Stack):
         # Build stage
         build_output = codepipeline.Artifact()
         build_project = codebuild.PipelineProject(
-            self, "CdkBuild",
+            self, f"{student_id}-CdkBuild",
+            project_name=f"{student_id}-CdkBuild",
             environment=codebuild.BuildEnvironment(
                 build_image=codebuild.LinuxBuildImage.STANDARD_7_0
             ),

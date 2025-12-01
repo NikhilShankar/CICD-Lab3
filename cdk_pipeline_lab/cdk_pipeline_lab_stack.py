@@ -20,8 +20,7 @@ class CdkPipelineLabStack(Stack):
         bucket = s3.Bucket(
             self, f"{student_id}-MyBucket",
             bucket_name=f"{student_id}-my-bucket",
-            removal_policy=RemovalPolicy.DESTROY,
-            auto_delete_objects=True
+            removal_policy=RemovalPolicy.DESTROY
         )
 
         # Create DynamoDB table for quotes
