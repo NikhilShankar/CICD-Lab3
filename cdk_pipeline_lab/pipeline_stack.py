@@ -61,16 +61,3 @@ class PipelineStack(Stack):
             stage_name="Build",
             actions=[build_action]
         )
-
-        # Deploy stage
-        deploy_action = codepipeline_actions.CloudFormationCreateUpdateStackAction(
-            action_name="Deploy_Stack",
-            stack_name="CdkPipelineLabStack",
-            template_path=build_output.at_path("CdkPipelineLabStack.template.json"),
-            admin_permissions=True
-        )
-
-        pipeline.add_stage(
-            stage_name="Deploy",
-            actions=[deploy_action]
-        )

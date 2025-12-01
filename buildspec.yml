@@ -11,13 +11,8 @@ phases:
 
   build:
     commands:
-      - cdk synth CdkPipelineLabStack
-      - echo "Publishing assets to S3..."
-      - |
-        for asset in $(find cdk.out -name "*.assets.json"); do
-          echo "Publishing assets from $asset"
-          npx cdk-assets publish -p $asset || true
-        done
+      - echo "Deploying CdkPipelineLabStack..."
+      - cdk deploy CdkPipelineLabStack --require-approval never
 
 artifacts:
   base-directory: cdk.out
